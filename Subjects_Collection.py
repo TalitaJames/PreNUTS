@@ -23,46 +23,8 @@ class Subj:
         for name, value in kwargs.items():
             setattr(self, name, value)
 
-#Each Faculty and its url code:
-faculty = ['ads',#0: Analytics and Data Science
-           'bus',#1: Business
-           'comm',#2: Communication
-           'cii',#3: Creative Intelligence and Innovation
-           'dab',#4: On The Haters
-           'edu',#5: Education
-           'eng',#6: Engineering
-           'health',#7: Health
-           'health-gem',#8: Heath (GEM)
-           'it',#9: Information Technology
-           'intl',#10: International Studies
-           'law',#11: Law
-           'sci',#12: Science
-           'tdi']#13: Transdiciplinary Innovation
-
-
-subList = []#The list of Subjects
-
-
-for facNum in range(len(faculty)):
-    #The page for the numerical list of the subjects, given a faculty
-    source = urllib.request.urlopen('http://www.handbook.uts.edu.au/%s/lists/numerical.html' %(faculty[facNum])).read()
-    soup = bs.BeautifulSoup(source, 'lxml')
-    
-
-    #Searches for text which start with 5 digits - This is the Subject Code
-    for line in soup.text.split('\n'):
-        if re.search('^\d{5}', line):
-            
-            code = re.search('^\d{5,6}', line).group(0)#First 5 digits are Subject Code
-            name = re.search('(?<=\d{5}\s).+', line).group(0)#Remaining text is the Subject Name
-
-            #Adds Subject to the Subject List
-            subList.append(Subj(code, name))
-
-    print('Got Subjects for', faculty[facNum])
-    
-    
-print('Got all the Subjects')
+    def __str__(self):
+        return f"\n#{self.code} {self.name}\n\tPrereq: {self.preReq}\n\tTOoPers: {self.tooPer}\n"
 
 
 #Searches for Subjects by subject code or name, defaults to returning a list of Subj instances
@@ -116,7 +78,7 @@ def getPrereq(inputCode):
                 for preSub in subList:
                     if preSub.code == preCode and not(inputCode in preSub.tooPer):#Only add it if it has not already been added
                         preSub.tooPer.append(inputCode)
-        
+
 
 def createSubjectJSON():
     for i in range(len(subList)):
@@ -143,5 +105,48 @@ def createSubjectJSON():
     subjectJsonFile.write(subjectJsonText)
 
     subjectJsonFile.close()
-    
-    
+
+# Gets all the subjects from the UTS Handbook
+def getSubjects():
+    #Each Faculty and its url code:
+    faculty = ['ads',#0: Analytics and Data Science
+            'bus',#1: Business
+            'comm',#2: Communication
+            'cii',#3: Creative Intelligence and Innovation
+            'dab',#4: On The Haters
+            'edu',#5: Education
+            'eng',#6: Engineering
+            'health',#7: Health
+            'health-gem',#8: Heath (GEM)
+            'it',#9: Information Technology
+            'intl',#10: International Studies
+            'law',#11: Law
+            'sci',#12: Science
+            'tdi']#13: Transdiciplinary Innovation
+
+    subList = []#The list of Subjects
+
+    for facNum in range(len(faculty)):
+        #The page for the numerical list of the subjects, given a faculty
+        source = urllib.request.urlopen('http://www.handbook.uts.edu.au/%s/lists/numerical.html' %(faculty[facNum])).read()
+        soup = bs.BeautifulSoup(source, 'lxml')
+
+
+        #Searches for text which start with 5 digits - This is the Subject Code
+        for line in soup.text.split('\n'):
+            if re.search('^\d{5}', line):
+                
+                code = re.search('^\d{5,6}', line).group(0)#First 5 digits are Subject Code
+                name = re.search('(?<=\d{5}\s).+', line).group(0)#Remaining text is the Subject Name
+
+                #Adds Subject to the Subject List
+                subList.append(Subj(code, name))
+
+        print('\tGot Subjects for', faculty[facNum])
+
+    print('Got all the Subjects')  
+    return subList
+
+
+if __name__=="__main__":
+    subList = getSubjects()
