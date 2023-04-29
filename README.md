@@ -21,6 +21,9 @@ Currently Supported:
 ---
 
 ## Future Features
+- Capacity for coreqs
+- conditional relationships on prerequisite
+- node maping for subjects 
 
 ### Refined logical relations on Prereqisites
 

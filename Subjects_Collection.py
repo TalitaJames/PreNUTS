@@ -30,10 +30,11 @@ class Subj:
 #Searches for Subjects by subject code or name, defaults to returning a list of Subj instances
 def querySubjects(query, disp = False):#disp = True -> Prints out Subjects (code and name)
     result = []#List of Subj instances
+    if disp: print("\nsubjects matching '%s':" %(query))
     for i in subList:
         if query.lower() in i.code+' '+i.name.lower():
             if disp:
-                print(i.code,':',i.name,'\n')
+                print(f"\t{i.code}: {i.name}")
             else:
                 result.append(i)
     if not(disp):
@@ -41,8 +42,7 @@ def querySubjects(query, disp = False):#disp = True -> Prints out Subjects (code
 
 
 
-    
-def getPrereq(inputCode):
+def getPrereq(inputCode, subList):
     validCode = False
     index = None
     for i in range(len(subList)):
@@ -80,26 +80,28 @@ def getPrereq(inputCode):
                         preSub.tooPer.append(inputCode)
 
 
-def createSubjectJSON():
+def createSubjectJSON(subList):
     for i in range(len(subList)):
-        getPrereq(subList[i].code)
+        getPrereq(subList[i].code, subList)
         if(i%100 == 0):
             loaded = round(i*100/len(subList), 2)
             loadingBar = '#'*int(loaded*30/100) + '-'*int(30 - loaded*30/100 +1)
-            print("%s%% Complete"%(str(round(i*100/len(subList), 2)))+'\t'+loadingBar)
+            # print("%s%% Complete"%(str(round(i*100/len(subList), 2)))+'\t'+loadingBar)
+            print(f" {str(round(i*100/len(subList), 2))}% Complete {loadingBar}")
+    print(f" {str(round(i*100/len(subList), 2))}% Complete {loadingBar}")
 
 
     subDictArr = []
-    
+
     for i in subList:
         subDictArr.append(i.__dict__)
-        
+
     subjectJsonText = json.dumps(subDictArr, indent = 4)
 
     filename = input("Name the json file: ")
 
     filename = filename[:filename.find(".json")]
-    
+   
     subjectJsonFile = open(filename+'.json', 'w')
 
     subjectJsonFile.write(subjectJsonText)
@@ -143,10 +145,19 @@ def getSubjects():
                 subList.append(Subj(code, name))
 
         print('\tGot Subjects for', faculty[facNum])
-
     print('Got all the Subjects')  
     return subList
 
 
 if __name__=="__main__":
     subList = getSubjects()
+    # print(f"Subject count: {len(subList)}, First Subject: {subList[0].code}")
+    
+    # for i in range(len(subList)):
+    #     getPrereq(subList[i].code, subList)
+    #     print(f"{i+1}/{len(subList)}", end='\r')
+    
+    # print(f"{subList[0]}")
+    createSubjectJSON(subList)
+    # querySubjects('Data Science for innovation', True)
+    
