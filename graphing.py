@@ -17,7 +17,7 @@ def findIndex(subjectCode):
     print(f"Subject {subjectCode} not found")
 
 
-def plotSubject(subjetDict,colour="lightblue"):
+def plotSingleSubject(subjetDict,colour="lightblue"):
 
     preReq=subjetDict["preReq"]
     subject=subjetDict["code"]
@@ -65,16 +65,17 @@ def plotSubject(subjetDict,colour="lightblue"):
     nx.draw(G, pos=pos, **plotArgs)
     plt.draw()
     plt.savefig(f"test_graphExports\{subjetDict['code']}_path.png")
-   
+
     plt.clf() # clear so next graphs don't overlap
+    return G
 
 
 if __name__ == "__main__":
     filename="subjects2023.json"
     classJson = readJson(filename)
 
-    # these 5 classes have the highest num of TooPres (all law' who's suprised)
+    # these 5 classes have the highest num of TooPres (all law who's suprised)
     top5TooPre=[33130,70311,70616,70110,70106] 
     
     for i in top5TooPre:
-        plotSubject(classJson[findIndex(int(i))])
+        plotSingleSubject(classJson[findIndex(int(i))])
