@@ -33,6 +33,20 @@ Example for 41012 (Programming for Mechatronic Systems)
 - conditional relationships on prerequisite
 
 
+## Notes/Thoughts/How do uni classes work?
+### Antireqs
+Is it safe to assume all anti reqs of one subject go both ways?
+eg 65212 Chemistry 2 has an anti req of 65022 chem 2a (seems to be old)
+Ie if 65022 were still active, and you had done 65212 that it would prohibit you from taking 65022? 
+
+As in:
+$\text{class A}  \xleftarrow{\text{anti}}\xrightarrow{\text{requisite}} \text{class B} $
+
+### Co reqs
+
+### the silly subjects
+w/out prereqs but have cp limits first (could be shown as a tooltip or smthing?)
+
 ## Requirements
 Install the requirements with  
 

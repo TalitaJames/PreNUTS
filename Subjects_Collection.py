@@ -67,6 +67,7 @@ def getPrereq(inputCode, subList):
 
     #Find the line of text describing the Pre-Requisites
     for line in subjectSoup.find_all('em'):
+        print(line)
         if re.search('Requisite\(s\)',str(line)):
 
             #For all matches of 5 or 6 digits, add it as a Pre-Requisite for the current subject
@@ -151,11 +152,9 @@ if __name__=="__main__":
     subList = getSubjects()
     # print(f"Subject count: {len(subList)}, First Subject: {subList[0].code}")
     
-    # for i in range(len(subList)):
-    #     getPrereq(subList[i].code, subList)
-    #     print(f"{i+1}/{len(subList)}", end='\r')
+    getPrereq(str(65212), subList)
     
     # print(f"{subList[0]}")
-    createSubjectJSON(subList)
+    # createSubjectJSON(subList)
     # querySubjects('Data Science for innovation', True)
     
