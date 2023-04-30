@@ -33,3 +33,9 @@ Example for 41012 (Programming for Mechatronic Systems)
 - conditional relationships on prerequisite
 
 
+## Requirements
+Install the requirements with  
+
+```
+pip install -r requirements.txt
+```
