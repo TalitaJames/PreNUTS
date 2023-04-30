@@ -21,9 +21,15 @@ Currently Supported:
 ---
 
 ## Future Features
-- Capacity for coreqs
-- conditional relationships on prerequisite
-- node maping for subjects 
+
+### Node maping for subjects 
+WIP! Will have to update after i do something abt codependencies ect. Also could be cool to be able to make a super graph, with an end class and it lists the begining classes ect(?)
+
+![node graph](nodeGraphs\41012_path.png)
+Example for 41012 (Programming for Mechatronic Systems)
 
 ### Refined logical relations on Prereqisites
+- Capacity for coreqs
+- conditional relationships on prerequisite
+
 

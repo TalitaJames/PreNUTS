@@ -88,8 +88,6 @@ def createSubjectJSON(subList):
             loadingBar = '#'*int(loaded*30/100) + '-'*int(30 - loaded*30/100 +1)
             # print("%s%% Complete"%(str(round(i*100/len(subList), 2)))+'\t'+loadingBar)
             print(f" {str(round(i*100/len(subList), 2))}% Complete {loadingBar}")
-    print(f" {str(round(i*100/len(subList), 2))}% Complete {loadingBar}")
-
 
     subDictArr = []
 
