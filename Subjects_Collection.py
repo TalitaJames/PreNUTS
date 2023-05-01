@@ -12,10 +12,15 @@ class Subj:
         self.name = name # name of the subject
         self.code = code # code of the subject
 
-        #Prerequisites of the subject
+        # Prerequisites of the subject
         self.preReq = [] 
-
-        #TOoPer - The Opposite of Prerequisites (aka postrequisites, postoptional, dependancy etc) of the subject
+        
+        # Antirequisites of the subject 
+        # (many antiReqs don't exist in the handbook due to not being run anymore,
+        # so data is taken as "00000 class name" rather than "00000")
+        self.antiReq = []
+        
+        # The Opposite of Prerequisites (aka postrequisites, postoptional, dependancy etc) of the subject
         self.tooPer = []
 
         #If A is a Prerequisite in B, B is a Tooper in A
@@ -24,7 +29,7 @@ class Subj:
             setattr(self, name, value)
 
     def __str__(self):
-        return f"\n#{self.code} {self.name}\n\tPrereq: {self.preReq}\n\tTOoPers: {self.tooPer}\n"
+        return f"\n#{self.code} {self.name}\n\tPrereq: {self.preReq}\n\tTOoPers: {self.tooPer}\n\tAntiReq: {self.antiReq}\n"
 
 
 #Searches for Subjects by subject code or name, defaults to returning a list of Subj instances
@@ -39,7 +44,6 @@ def querySubjects(query, disp = False):#disp = True -> Prints out Subjects (code
                 result.append(i)
     if not(disp):
         return result
-
 
 
 def getPrereq(inputCode, subList):
@@ -67,7 +71,7 @@ def getPrereq(inputCode, subList):
 
     #Find the line of text describing the Pre-Requisites
     for line in subjectSoup.find_all('em'):
-        print(line)
+        # print(line)
         if re.search('Requisite\(s\)',str(line)):
 
             #For all matches of 5 or 6 digits, add it as a Pre-Requisite for the current subject
@@ -79,6 +83,12 @@ def getPrereq(inputCode, subList):
                 for preSub in subList:
                     if preSub.code == preCode and not(inputCode in preSub.tooPer):#Only add it if it has not already been added
                         preSub.tooPer.append(inputCode)
+        
+        if re.search('Anti-requisite\(s\)',str(line)):
+            for antiReq in re.findall('\d{5}(?!.html").*?(?=  AND|<\/em>)', str(line)):
+                antiReq=antiReq.strip()
+                antiReq=re.sub(r'<\/a>', "", antiReq, 0, re.IGNORECASE)
+                subList[index].antiReq.append(antiReq)
 
 
 def createSubjectJSON(subList):
@@ -148,13 +158,33 @@ def getSubjects():
     return subList
 
 
+# Get read the subject data from json file
+def getSubjectsJSON(filename):
+    with open(filename, 'r') as f:
+        data = json.load(f)
+    
+    subList = []
+    for val in (data):
+        reqs = {'preReq':val['preReq'], 'tooPer':val['tooPer'], 'antiReq':val['antiReq']}
+        newSub=Subj(val['code'], val['name'],**reqs)
+        subList.append(newSub)
+    print("Got all the Subjects (from JSON)")
+    return subList
+
+
 if __name__=="__main__":
-    subList = getSubjects()
-    # print(f"Subject count: {len(subList)}, First Subject: {subList[0].code}")
-    
-    getPrereq(str(65212), subList)
-    
-    # print(f"{subList[0]}")
+    # subList = getSubjects()
+    subList=getSubjectsJSON("subjects2023_chaos.json")
     # createSubjectJSON(subList)
-    # querySubjects('Data Science for innovation', True)
+    
+    print(f"Subject count: {len(subList)}, First Subject: {subList[0].code}")\
+    # antiReqTests=[49189,23600,37242,50816,15622,83341,49254,49329,22999]
+    # for i in antiReqTests:
+    #     getPrereq(str(i),subList)
+    
+    antireqs = [x.antiReq for x in subList if len(x.antiReq)!=0]
+    
+    with open('test_chaos.txt', 'w') as f:
+        for line in antireqs:
+            f.write(f"{line}\n")
     
