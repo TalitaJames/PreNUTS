@@ -32,24 +32,33 @@ Example for 41012 (Programming for Mechatronic Systems)
 - Capacity for coreqs
 - conditional relationships on prerequisite
 
+In general, prereqs tend to be OR first then AND in terms of logic
+
+ie 41012 as pictured above has listed preReqs like this
+> Requisite(s): (48623 Mechatronics 2 OR (48622 Embedded Mechatronics Systems AND (41039 Programming 1 OR 48430 Fundamentals of C Programming OR 37171 Introduction to Programming OR 48221 Engineering Computations OR 48023 Programming Fundamentals)))
+
+so a more appropriate diagram would look like this
+![node graph](nodeGraphs\41012_boolean.jpg)
+
 
 ## Notes/Thoughts/How do uni classes work?
 ### Antireqs
-Is it safe to assume all anti reqs of one subject go both ways?
-eg 65212 Chemistry 2 has an anti req of 65022 chem 2a (seems to be old)
-Ie if 65022 were still active, and you had done 65212 that it would prohibit you from taking 65022? 
+From my understanding, antireqs aren't reciprocal, ie:
+$ A  \xrightarrow{\text{antiReq}} B $
 
-As in:
-$\text{class A}  \xleftarrow{\text{anti}}\xrightarrow{\text{requisite}} \text{class B} $
+### Co reqs 
+Also not reciprical
 
-### Co reqs
 
-### the silly subjects
-w/out prereqs but have cp limits first (could be shown as a tooltip or smthing?)
+$ A  \xrightarrow{\text{coReq}} B \text{ doesn't imply }  B  \xrightarrow{\text{coReq}} A$
+
+
+### The silly subjects
+This is what i'm calling subjects that don't have preReqs but have other course requirements (ie, cp limits). Haven't implemented yet
 
 ## Requirements
-Install the requirements with  
-
+Install the requirements[^1] with  
+[^1]: not sure i have them all, or that they're all required but just run the code and see what breaks then install that
 ```
 pip install -r requirements.txt
 ```
