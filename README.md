@@ -1,6 +1,6 @@
 # PreNUTS - A 🥜 project 
 ## Pre-requisite Network for Universities (and TooPr System)
-### Go [here!](http://itsjustmustafa.github.io/PreNUTS)
+### Go [here!](http://itsjustmustafa.github.io/PreNUTS) for the stable version
 ---
 ### TooPr:
 /ˈtuːpə/ - The opposite of Pre-requisite
@@ -25,7 +25,7 @@ Currently Supported:
 ### Node maping for subjects 
 WIP! Will have to update after i do something abt codependencies ect. Also could be cool to be able to make a super graph, with an end class and it lists the begining classes ect(?)
 
-![node graph](https://raw.githubusercontent.com/TalitaJames/PreNUTS/master/nodeGraphs\41012_path.png)
+![node graph](nodeGraphs\41012_path.png)
 Example for 41012 (Programming for Mechatronic Systems)
 
 ### Refined logical relations on Prereqisites
@@ -38,18 +38,17 @@ ie 41012 as pictured above has listed preReqs like this
 > Requisite(s): (48623 Mechatronics 2 OR (48622 Embedded Mechatronics Systems AND (41039 Programming 1 OR 48430 Fundamentals of C Programming OR 37171 Introduction to Programming OR 48221 Engineering Computations OR 48023 Programming Fundamentals)))
 
 so a more appropriate diagram would look like this
-![node graph](https://raw.githubusercontent.com/TalitaJames/PreNUTS/master/nodeGraphs\41012_boolean.jpg)
+![node graph](nodeGraphs\41012_boolean.jpg)
 
 ## Notes/Thoughts/How do uni classes work?
 ### Antireqs
 From my understanding, antireqs aren't reciprocal, ie:
-$ A  \xrightarrow{\text{antiReq}} B $
+$A \xrightarrow{\text{antiReq}} B $
 
 ### Co reqs 
-Also not reciprical
+Also not reciprocal
 
-
-$ A  \xrightarrow{\text{coReq}} B \text{ doesn't imply }  B  \xrightarrow{\text{coReq}} A$
+$A \xrightarrow{\text{coReq}} B \text{ doesn't imply }  B \xrightarrow{\text{coReq}} A$
 
 
 ### The silly subjects

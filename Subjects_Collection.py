@@ -60,7 +60,7 @@ def getPrereq(inputCode, subList):
         #print("Please Enter A Valid Code")
         return()
 
-    try:#try to find the subject site for the inputted subject
+    try: #try to find the subject site for the inputted subject
         subjectSource = urllib.request.urlopen('http://handbook.uts.edu.au/subjects/%s.html' %(inputCode)).read()
 
     except:#if it doesnt exist, return this message
@@ -71,23 +71,30 @@ def getPrereq(inputCode, subList):
 
     #Find the line of text describing the Pre-Requisites
     for line in subjectSoup.find_all('em'):
-        # print(line)
+
         if re.search('Requisite\(s\)',str(line)):
 
             #For all matches of 5 or 6 digits, add it as a Pre-Requisite for the current subject
             for preCode in re.findall('\d{5}(?=\.html)', str(line)):
-                if not(preCode) in subList[index].preReq:#Only add it if it has not already been added
+                if not(preCode) in subList[index].preReq: #Only add it if it has not already been added
                     subList[index].preReq.append(preCode)
 
                 #Adds the current subject as a Post-Requisite for this subject's Branch
                 for preSub in subList:
-                    if preSub.code == preCode and not(inputCode in preSub.tooPer):#Only add it if it has not already been added
+                    if preSub.code == preCode and not(inputCode in preSub.tooPer): #Only add it if it has not already been added
                         preSub.tooPer.append(inputCode)
         
-        if re.search('Anti-requisite\(s\)',str(line)):
-            for antiReq in re.findall('\d{5}(?!.html").*?(?=  AND|<\/em>)', str(line)):
+        if re.search('Anti-requisite\(s\)',str(line)): #FIXME: known error that some classes keep the .html"> in their string
+            antiReq_tupples=re.findall('(\d{5}(?!.html"|\d.html").*?(?= ( AND|<\/em>)))', str(line))
+            antiReq_list=[x[0] for x in antiReq_tupples]
+            
+            
+            print(f"\nID:{inputCode}")
+            
+            for antiReq in antiReq_list:
                 antiReq=antiReq.strip()
-                antiReq=re.sub(r'<\/a>', "", antiReq, 0, re.IGNORECASE)
+                antiReq=re.sub(r'<\/a>', "", antiReq, 0, re.IGNORECASE)                
+                
                 subList[index].antiReq.append(antiReq)
 
 
@@ -147,8 +154,8 @@ def getSubjects():
         for line in soup.text.split('\n'):
             if re.search('^\d{5}', line):
                 
-                code = re.search('^\d{5,6}', line).group(0)#First 5 digits are Subject Code
-                name = re.search('(?<=\d{5}\s).+', line).group(0)#Remaining text is the Subject Name
+                code = re.search('^\d{5,6}', line).group(0) #First 5 digits are Subject Code
+                name = re.search('(?<=\d{5}\s).+', line).group(0) #Remaining text is the Subject Name
 
                 #Adds Subject to the Subject List
                 subList.append(Subj(code, name))
@@ -174,17 +181,19 @@ def getSubjectsJSON(filename):
 
 if __name__=="__main__":
     # subList = getSubjects()
-    subList=getSubjectsJSON("subjects2023_chaos.json")
-    # createSubjectJSON(subList)
+    subList=getSubjectsJSON("subjects2023.json")
     
-    print(f"Subject count: {len(subList)}, First Subject: {subList[0].code}")\
-    # antiReqTests=[49189,23600,37242,50816,15622,83341,49254,49329,22999]
-    # for i in antiReqTests:
-    #     getPrereq(str(i),subList)
+    time_start = time.time()    
+    createSubjectJSON(subList)
+    time_end = time.time()
+    print(f"Took: {round((time_end-time_start)/60)} mins \t or {round(time_end-time_start, 3)}s")
+
+    # antiReqTests = ["028271" , "013419", "013415", "028277", "21894", "22747"]
+    # for code in antiReqTests:
+    #     getPrereq(code,subList)
     
     antireqs = [x.antiReq for x in subList if len(x.antiReq)!=0]
     
     with open('test_chaos.txt', 'w') as f:
         for line in antireqs:
             f.write(f"{line}\n")
-    
