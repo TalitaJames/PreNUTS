@@ -79,3 +79,7 @@ if __name__ == "__main__":
     
     for i in top5TooPre:
         plotSingleSubject(classJson[findIndex(int(i))])
+        
+        # plotSingleSubject(classJson[])
+        
+
